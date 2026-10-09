@@ -15,10 +15,4 @@
     enable32Bit = true;
   };
 
-  environment.etc."xdg/autostart/vmware-user.desktop".text = ''
-    [Desktop Entry]
-    Type=Application
-    Name=VMware User Agent
-    Hidden=true
-  '';
 }

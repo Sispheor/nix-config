@@ -23,4 +23,12 @@
       email = "nico.marcq@gmail.com";
     };
   };
+
+  programs.kitty = {
+    enable = true;
+    settings = {
+      hide_window_decorations = "yes";
+      include = "~/.config/kitty/themes/noctalia.conf";
+    };
+  };
 }

@@ -103,6 +103,8 @@
      wget
      vscode
      git
+     jq
+     kitty
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
