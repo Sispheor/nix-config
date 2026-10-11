@@ -36,6 +36,17 @@
 
   programs.git = {
     enable = true;
+    ignores = [
+      ".idea"
+      "nico.py"
+      "nico.go"
+      "nico.sh"
+      "nico.yml"
+      "nico.yaml"
+      "nico.json"
+      ".vscode"
+      "ansible.cfg"
+    ];
     settings.user = {
       name  = "Nicolas Marcq";
       email = "nico.marcq@gmail.com";
