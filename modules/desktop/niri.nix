@@ -11,8 +11,10 @@
 
   environment.systemPackages = with pkgs; [
     alacritty
+    brightnessctl
     fuzzel
-    xwayland-satellite
+    playerctl
+    swaylock
   ];
 
   environment.sessionVariables.NIXOS_OZONE_WL = "1";

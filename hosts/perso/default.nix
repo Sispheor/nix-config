@@ -51,16 +51,6 @@
     LC_TIME = "fr_FR.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = false;
-
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "fr";
-    variant = "azerty";
-  };
-
   # Configure console keymap
   console.keyMap = "fr";
 
@@ -108,8 +98,8 @@
      vscode
      git
      jq
-     kitty
      gitkraken
+     ncdu
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
