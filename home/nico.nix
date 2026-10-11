@@ -2,6 +2,9 @@
 
 { config, pkgs, inputs,... }:
 
+let
+  vaultMedusa = pkgs.callPackage ./medusa.nix { };
+in
 {
   imports = [
     ./modules/niri
@@ -24,7 +27,15 @@
     gcc
     gigolo
     gnumake
+    govc
     ipcalc
+    k9s
+    kubectl-df-pv
+    kubectx
+    kubeswitch
+    kustomize
+    vaultMedusa
+    mkcert
     nmap
     nextcloud-client
     openldap
