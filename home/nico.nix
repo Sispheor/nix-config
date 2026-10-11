@@ -1,6 +1,6 @@
 # home/nico.nix
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs,... }:
 
 {
   imports = [
@@ -49,9 +49,19 @@
     };
   };
 
-
   programs.yazi = {
     enable = true;
     enableZshIntegration = true;
+  };
+
+  programs.opencode = {
+    enable = true;
+
+    package =
+      inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode;
+
+    settings = {
+      autoupdate = false;
+    };
   };
 }
