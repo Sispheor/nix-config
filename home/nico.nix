@@ -16,6 +16,24 @@
 
   programs.home-manager.enable = true;
 
+  home.packages = with pkgs; [
+    bind
+    binutils
+    btop
+    curl
+    gcc
+    gigolo
+    gnumake
+    ipcalc
+    nmap
+    nextcloud-client
+    openldap
+    pkg-config
+    ripgrep
+    tcpdump
+    tree
+  ];
+
   programs.git = {
     enable = true;
     settings.user = {
@@ -47,6 +65,38 @@
         "sudo"
       ];
     };
+  };
+
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.ssh = {
+    enable = true;
+    enableDefaultConfig = false;
+    settings."*" = {
+      ForwardAgent = false;
+      AddKeysToAgent = "yes";
+      Compression = false;
+      ServerAliveInterval = 0;
+      ServerAliveCountMax = 3;
+      HashKnownHosts = false;
+      UserKnownHostsFile = "~/.ssh/known_hosts";
+      ControlMaster = "no";
+      ControlPath = "~/.ssh/master-%r@%n:%p";
+      ControlPersist = "no";
+    };
+  };
+
+  services.nextcloud-client = {
+    enable = true;
+    startInBackground = true;
   };
 
   programs.yazi = {

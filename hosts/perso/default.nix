@@ -75,6 +75,20 @@
   # ZSH
   programs.zsh.enable = true;
 
+  # Resolve locally so test host overrides can be added without changing the
+  # desktop's DNS settings. dnsmasq forwards all other requests to Cloudflare.
+  networking.nameservers = [ "127.0.0.1" ];
+  services.dnsmasq = {
+    enable = true;
+    resolveLocalQueries = false;
+    settings = {
+      listen-address = "127.0.0.1";
+      bind-interfaces = true;
+      server = [ "1.1.1.1" "1.0.0.1" ];
+      cache-size = 1000;
+    };
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."nico" = {
     isNormalUser = true;
