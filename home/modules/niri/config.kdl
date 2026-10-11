@@ -303,6 +303,11 @@ binds {
     // since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
+    Mod+Space {
+        spawn "noctalia" "msg" "panel-toggle" "launcher"
+    }
+
+
 
     Print { screenshot; }
     Ctrl+Print { screenshot-screen; }

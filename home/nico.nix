@@ -31,4 +31,27 @@
       include = "~/.config/kitty/themes/noctalia.conf";
     };
   };
+
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+
+    # Change ohMyZsh to oh-my-zsh
+    oh-my-zsh = {
+      enable = true;
+      theme = "agnoster";
+      plugins = [
+        "git"
+        "sudo"
+      ];
+    };
+  };
+
+
+  programs.yazi = {
+    enable = true;
+    enableZshIntegration = true;
+  };
 }

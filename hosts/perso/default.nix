@@ -53,7 +53,7 @@
 
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
+  services.xserver.enable = false;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -82,11 +82,15 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.libinput.enable = true;
 
+  # ZSH
+  programs.zsh.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."nico" = {
     isNormalUser = true;
     description = "nico";
     extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
     packages = with pkgs; [
       kdePackages.kate
     #  thunderbird
@@ -105,6 +109,7 @@
      git
      jq
      kitty
+     gitkraken
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
