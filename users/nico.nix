@@ -1,10 +1,7 @@
-# home/nico.nix
+# users/nico.nix
 
-{ config, pkgs, inputs,... }:
+{ pkgs, inputs, ... }:
 
-let
-  vaultMedusa = pkgs.callPackage ./medusa.nix { };
-in
 {
   imports = [
     ./modules/niri
@@ -34,7 +31,6 @@ in
     kubectx
     kubeswitch
     kustomize
-    vaultMedusa
     mkcert
     nmap
     nextcloud-client

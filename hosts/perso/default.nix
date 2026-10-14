@@ -12,6 +12,7 @@
       ../../modules/desktop/kde.nix
       ../../modules/desktop/niri.nix
       ../../modules/desktop/noctalia.nix
+      ../../modules/medusa.nix
     ];
 
   # enable flakes
@@ -74,6 +75,7 @@
 
   # ZSH
   programs.zsh.enable = true;
+  programs.medusa.enable = true;
 
   # Resolve locally so test host overrides can be added without changing the
   # desktop's DNS settings. dnsmasq forwards all other requests to Cloudflare.

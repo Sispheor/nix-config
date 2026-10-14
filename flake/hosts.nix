@@ -26,7 +26,7 @@
           };
 
           home-manager.users.nico =
-            import ../home/nico.nix;
+            import ../users/nico.nix;
         }
       ];
     };
