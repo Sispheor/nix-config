@@ -4,8 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    flake-parts.url = "github:hercules-ci/flake-parts";
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,12 +23,14 @@
 
   };
 
-  outputs = inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ];
-
-      imports = [
-        ./flake/hosts.nix
-      ];
+  outputs = inputs:
+    let
+      mkSystem = import ./lib/mkSystem.nix { inherit inputs; };
+    in
+    {
+      nixosConfigurations.perso = mkSystem "perso" {
+        system = "x86_64-linux";
+        user = "nico";
+      };
     };
 }

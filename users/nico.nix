@@ -1,6 +1,6 @@
 # users/nico.nix
 
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, user, ... }:
 
 {
   imports = [
@@ -9,8 +9,8 @@
   #  ./modules/shell.nix
   ];
 
-  home.username = "nico";
-  home.homeDirectory = "/home/nico";
+  home.username = user;
+  home.homeDirectory = "/home/${user}";
 
   home.stateVersion = "26.05";
 
