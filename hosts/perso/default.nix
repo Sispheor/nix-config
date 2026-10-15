@@ -74,6 +74,9 @@
   programs.zsh.enable = true;
   programs.medusa.enable = true;
 
+  # Support generic Linux executables such as uv-managed Python interpreters.
+  programs.nix-ld.enable = true;
+
   # Resolve locally so test host overrides can be added without changing the
   # desktop's DNS settings. dnsmasq forwards all other requests to Cloudflare.
   networking.nameservers = [ "127.0.0.1" ];
@@ -108,6 +111,8 @@
   environment.systemPackages = with pkgs; [
      vscode
      gitkraken
+     pycharm
+     uv
   ];
 
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
