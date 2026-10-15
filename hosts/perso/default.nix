@@ -9,6 +9,7 @@
       ../../modules/desktop/kde.nix
       ../../modules/desktop/niri.nix
       ../../modules/desktop/noctalia.nix
+      ../../modules/desktop/noctalia-greeter.nix
       ../../modules/medusa.nix
     ];
 

@@ -4,7 +4,7 @@
   programs.niri.enable = true;
 
   # Both Plasma and Niri define a default session.
-  # Explicitly prefer Niri while keeping Plasma available in SDDM.
+  # Explicitly prefer Niri while keeping Plasma available in the greeter.
   services.displayManager.defaultSession = lib.mkForce "niri";
 
   security.polkit.enable = true;
