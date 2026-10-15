@@ -17,28 +17,15 @@
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
-    bind
-    binutils
-    btop
-    curl
-    gcc
     gigolo
-    gnumake
     govc
-    ipcalc
     k9s
     kubectl-df-pv
     kubectx
     kubeswitch
     kustomize
     mkcert
-    nmap
     nextcloud-client
-    openldap
-    pkg-config
-    ripgrep
-    tcpdump
-    tree
   ];
 
   programs.git = {

@@ -11,6 +11,7 @@ inputs.nixpkgs.lib.nixosSystem {
   };
 
   modules = [
+    ../modules/common.nix
     (../hosts + "/${hostName}")
 
     inputs.home-manager.nixosModules.home-manager
