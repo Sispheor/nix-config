@@ -1,6 +1,10 @@
-{ ... }:
+{ inputs, ... }:
 
 {
+  imports = [
+    inputs.clipway.nixosModules.default
+  ];
+
   virtualisation.vmware.guest.enable = true;
   virtualisation.vmware.guest.headless = false;
 
