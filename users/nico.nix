@@ -5,6 +5,7 @@
 {
   imports = [
     ./modules/niri
+    inputs.nixdatifier.homeManagerModules.default
   #  ./modules/git.nix
   #  ./modules/shell.nix
   ];
@@ -15,6 +16,11 @@
   home.stateVersion = "26.05";
 
   programs.home-manager.enable = true;
+
+  programs.nixdatifier = {
+    enable = true;
+    autostart = true;
+  };
 
   home.packages = with pkgs; [
     gigolo
