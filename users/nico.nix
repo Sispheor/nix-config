@@ -1,6 +1,6 @@
 # users/nico.nix
 
-{ pkgs, inputs, user, ... }:
+{ config, lib, pkgs, inputs, user, ... }:
 
 {
   imports = [
@@ -28,7 +28,6 @@
     k9s
     kubectl-df-pv
     kubectx
-    kubeswitch
     kustomize
     mkcert
     nextcloud-client
@@ -97,11 +96,26 @@
     };
   };
 
+  home.activation.createKubeconfigDirectory = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run ${pkgs.coreutils}/bin/mkdir -p -m 0700 ${lib.escapeShellArg "${config.home.homeDirectory}/.kube/kubeconfigs"}
+  '';
+
+  programs.kubeswitch = {
+    enable = true;
+    enableZshIntegration = true;
+    commandName = "switch";
+  };
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
+
+    shellAliases = {
+      k = "kubectl";
+      s = ''switch --kubeconfig-path $HOME/.kube/kubeconfigs --kubeconfig-name "*.kubeconfig"'';
+    };
 
     # Change ohMyZsh to oh-my-zsh
     oh-my-zsh = {
