@@ -4,6 +4,10 @@ input {
             layout "fr"
         }
     }
+    mouse {
+        accel-profile "flat"
+        accel-speed 0.0
+    }
 }
 
 layout {
