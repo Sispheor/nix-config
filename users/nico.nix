@@ -112,10 +112,11 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-    shellAliases = {
-      k = "kubectl";
-      s = ''switch --kubeconfig-path $HOME/.kube/kubeconfigs --kubeconfig-name "*.kubeconfig"'';
-    };
+    initContent = ''
+      for file in "$HOME"/Nextcloud/linux_config/bashrc.d/*.bashrc(N); do
+        source "$file"
+      done
+    '';
 
     # Change ohMyZsh to oh-my-zsh
     oh-my-zsh = {
