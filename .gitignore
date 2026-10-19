@@ -1,2 +1,5 @@
 # NixOS build links
 result
+
+# Local hardware backups created by scripts/bootstrap.sh
+.bootstrap-backups/
