@@ -60,6 +60,7 @@
         "ctrl+shift+x=close_tab:this"
         "ctrl+shift+w=close_surface"
       ];
+      theme = "noctalia";
     };
   };
 
