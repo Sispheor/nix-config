@@ -93,3 +93,25 @@ sudo nixos-rebuild switch --flake .#perso
 `system.stateVersion` and `home.stateVersion` are currently `26.05`. These control
 compatibility defaults, not the package release. Review them for your fresh
 installation; do not increase them as part of routine package updates.
+
+## Project development with mise
+
+`users/modules/mise.nix` installs mise and enables automatic environment loading
+in Zsh. The host's `nix-ld` support lets mise use precompiled Python interpreters
+instead of building Python from source. Global interactive commands such as
+`mise use --global` remain available through a mutable user configuration.
+
+After rebuilding, open a new terminal. In a project with a `mise.toml`, run:
+
+```bash
+mise trust
+mise install
+```
+
+The project's tools and configured virtualenv are then selected automatically
+when entering its directory. Keep native libraries and development headers in a
+project-local Nix shell when needed; mise does not supply those dependencies.
+
+Project-specific native environments can also live in Home Manager. The
+[development modules](users/modules/development/README.md) provide
+`tower-automation-shell`, keeping Nix-specific support out of the shared project.

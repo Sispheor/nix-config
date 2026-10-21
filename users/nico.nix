@@ -4,6 +4,8 @@
 
 {
   imports = [
+    ./modules/development/tower-automation.nix
+    ./modules/mise.nix
     ./modules/niri
     inputs.nixdatifier.homeManagerModules.default
   #  ./modules/git.nix
