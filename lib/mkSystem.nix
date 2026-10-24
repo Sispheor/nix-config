@@ -1,7 +1,7 @@
 { inputs }:
 
 hostName:
-{ system, user }:
+{ system, user, workstation ? false }:
 
 inputs.nixpkgs.lib.nixosSystem {
   inherit system;
@@ -13,9 +13,8 @@ inputs.nixpkgs.lib.nixosSystem {
   modules = [
     ../modules/common.nix
     (../hosts + "/${hostName}")
-
     inputs.home-manager.nixosModules.home-manager
-
+  ] ++ inputs.nixpkgs.lib.optional workstation ../modules/workstation.nix ++ [
     {
       networking.hostName = inputs.nixpkgs.lib.mkDefault hostName;
 
@@ -27,7 +26,9 @@ inputs.nixpkgs.lib.nixosSystem {
           inherit inputs hostName user;
         };
 
-        users.${user} = import (../users + "/${user}.nix");
+        users.${user}.imports = [
+          (../users + "/${user}.nix")
+        ] ++ inputs.nixpkgs.lib.optional workstation ../users/workstation.nix;
       };
     }
   ];

@@ -33,9 +33,17 @@
       mkSystem = import ./lib/mkSystem.nix { inherit inputs; };
     in
     {
-      nixosConfigurations.perso = mkSystem "perso" {
-        system = "x86_64-linux";
-        user = "nico";
+      nixosConfigurations = {
+        appart = mkSystem "appart" {
+          system = "x86_64-linux";
+          user = "nico";
+          workstation = true;
+        };
+        hpe = mkSystem "hpe" {
+          system = "x86_64-linux";
+          user = "nico";
+          workstation = true;
+        };
       };
     };
 }

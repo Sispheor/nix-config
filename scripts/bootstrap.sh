@@ -4,12 +4,13 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: bash scripts/bootstrap.sh [--update]
+Usage: bash scripts/bootstrap.sh --host <host> [--update]
 
-Prepare this checkout for the perso configuration on a freshly installed NixOS
-VM. Copy the installed hardware configuration (backing up the old copy), check
+Prepare this checkout for the selected host on a freshly installed NixOS VM.
+Copy the installed hardware configuration (backing up the old copy), check
 prerequisites, and print the rebuild command. No rebuild or reboot is performed.
 
+  --host    Select the host to deploy (appart or hpe).
   --update  Update all flake inputs; otherwise keep flake.lock unchanged.
   --help    Show this help.
 EOF
@@ -21,23 +22,34 @@ die() {
 }
 
 update=false
-for arg in "$@"; do
-  case "$arg" in
-    --update) update=true ;;
+host=
+while (( $# )); do
+  case "$1" in
+    --host)
+      (( $# >= 2 )) || die '--host requires a value (appart or hpe).'
+      [[ -z "$host" ]] || die '--host may only be specified once.'
+      host=$2
+      shift 2
+      ;;
+    --update) update=true; shift ;;
     --help|-h) usage; exit 0 ;;
-    *) usage >&2; die "Unknown argument: $arg" ;;
+    *) usage >&2; die "Unknown argument: $1" ;;
   esac
 done
+case "$host" in
+  appart|hpe) ;;
+  *) usage >&2; die 'Select a host with --host appart or --host hpe.' ;;
+esac
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
 hardware_source=/etc/nixos/hardware-configuration.nix
-hardware_target="$repo_dir/hosts/perso/hardware-configuration.nix"
+hardware_target="$repo_dir/hosts/$host/hardware-configuration.nix"
 nix_flags=(--option experimental-features 'nix-command flakes')
 
 [[ -e /etc/NIXOS ]] || die 'Run this on the installed NixOS system, after booting from its disk.'
-[[ $(uname -m) == x86_64 ]] || die 'The perso configuration requires x86_64-linux.'
+[[ $(uname -m) == x86_64 ]] || die "The $host configuration requires x86_64-linux."
 [[ -r "$hardware_source" ]] || die "Cannot read $hardware_source. Finish the minimal NixOS installation first."
-[[ -f "$hardware_target" && -f "$repo_dir/flake.lock" ]] || die 'Expected a complete checkout of this repository.'
+[[ -f "$hardware_target" && -f "$repo_dir/hosts/$host/default.nix" && -f "$repo_dir/flake.lock" ]] || die 'Expected a complete checkout of this repository.'
 [[ -w "$hardware_target" && -w "$repo_dir" ]] || die 'Run from a checkout owned by your user.'
 
 for command in nix nixos-rebuild git curl lsblk findmnt getent; do
@@ -50,8 +62,8 @@ if (( EUID != 0 )); then
 fi
 
 # The hardware file describes filesystems, but does not select the bootloader.
-[[ ! -d /sys/firmware/efi ]] || die 'This VM boots with UEFI. Adapt hosts/perso/default.nix to the installed EFI bootloader before using this bootstrap.'
-[[ -b /dev/sda ]] || die 'The configuration installs BIOS GRUB on /dev/sda, but that disk does not exist. Adapt hosts/perso/default.nix first.'
+[[ ! -d /sys/firmware/efi ]] || die "This VM boots with UEFI. Adapt hosts/$host/default.nix to the installed EFI bootloader before using this bootstrap."
+[[ -b /dev/sda ]] || die "The configuration installs BIOS GRUB on /dev/sda, but that disk does not exist. Adapt hosts/$host/default.nix first."
 root_device=$(findmnt -n -o SOURCE /)
 # Strip a possible btrfs subvolume suffix before querying block ancestry.
 root_device=${root_device%%\[*}
@@ -62,7 +74,7 @@ while IFS= read -r device; do
     on_sda=true
   fi
 done <<< "$root_disks"
-"$on_sda" || die 'The root filesystem is not on /dev/sda. Review the hard-coded GRUB device in hosts/perso/default.nix first.'
+"$on_sda" || die "The root filesystem is not on /dev/sda. Review the hard-coded GRUB device in hosts/$host/default.nix first."
 
 # Check network access before changing the checkout or fetching flake inputs.
 curl --fail --silent --show-error --location --connect-timeout 15 --max-time 30 \
@@ -88,8 +100,8 @@ else
 fi
 
 printf '\nPreparation complete. Review the hardware changes:\n\n'
-printf '  git -C %q diff -- hosts/perso/hardware-configuration.nix flake.lock\n' "$repo_dir"
+printf '  git -C %q diff -- %q flake.lock\n' "$repo_dir" "hosts/$host/hardware-configuration.nix"
 printf '\nApply the configuration with:\n\n'
 printf '  sudo nixos-rebuild switch --option experimental-features %q --flake %q\n' \
-  'nix-command flakes' "$repo_dir#perso"
+  'nix-command flakes' "$repo_dir#$host"
 printf '\nAfter a successful rebuild, reboot to use the new kernel and desktop.\n'

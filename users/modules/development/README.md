@@ -37,14 +37,15 @@ programs.nix-ld.enable = true;
 ```
 
 This is a NixOS option, not a Home Manager option. It is already enabled for
-`perso` in this repository.
+both `appart` and `hpe` in this repository.
 
 ### Apply and use
 
 Rebuild the NixOS configuration, then open a new terminal:
 
 ```bash
-sudo nixos-rebuild switch --flake 'path:/home/nico/nixos-config#perso'
+HOST=appart # or hpe, on the corresponding VM
+sudo nixos-rebuild switch --flake "path:/home/nico/nixos-config#$HOST"
 ```
 
 From your tower-automation checkout, enter the native development environment:
