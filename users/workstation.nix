@@ -53,14 +53,6 @@
     };
   };
 
-  programs.kitty = {
-    enable = true;
-    settings = {
-      hide_window_decorations = "yes";
-      include = "~/.config/kitty/themes/noctalia.conf";
-    };
-  };
-
   services.nextcloud-client = {
     enable = true;
     startInBackground = true;
