@@ -8,7 +8,6 @@
     ./medusa.nix
   ];
 
-  programs.medusa.enable = true;
   programs.nix-ld.enable = true; # Support generic Linux executables
 
   # Enable CUPS to print documents.

@@ -29,7 +29,8 @@ in
 {
   options.programs.medusa.enable = lib.mkEnableOption "the Medusa Vault CLI";
 
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ package ];
+  config = {
+    programs.medusa.enable = true;
+    environment.systemPackages = lib.mkIf cfg.enable [ package ];
   };
 }
