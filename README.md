@@ -3,9 +3,25 @@
 Personal `x86_64-linux` NixOS configurations for hosts `appart` and `hpe`, with
 Home Manager integrated into the system rebuild and user `nico`. Select the host
 to deploy using the corresponding flake output (`#appart` or `#hpe`). Shared
-system basics live in `modules/common.nix`; desktop services and UI packages
-are enabled separately through `modules/workstation.nix` and
-`users/workstation.nix` when a host sets `workstation = true` in `flake.nix`.
+system basics live in `modules/common.nix`. Two independent flags in `flake.nix`
+select additional system and Home Manager modules; both default to `false`:
+
+- `workstation = true` imports `modules/workstation.nix` and
+  `users/workstation.nix`: development and UI applications (including VS Code,
+  PyCharm, Firefox, and Ghostty), `nix-ld`, and local DNS overrides.
+- `desktop = true` imports `modules/desktop.nix` and `users/desktop.nix`:
+  KDE/SDDM, Niri, Noctalia, printing, PipeWire, Nixdatifier, and the Nextcloud
+  background service. It also selects the Noctalia theme when Ghostty is enabled.
+
+Both current hosts enable both flags. A future WSL2 host can keep the workstation
+applications without a local desktop session by setting:
+
+```nix
+workstation = true;
+desktop = false;
+```
+
+The host's WSL2 integration belongs in its own `hosts/<host>` configuration.
 
 ## Bootstrap after a minimal installation
 

@@ -1,20 +1,10 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
-  imports = [
-    ./modules/niri
-    inputs.nixdatifier.homeManagerModules.default
-  ];
-
   home.packages = with pkgs; [
     gigolo
     nextcloud-client
   ];
-
-  programs.nixdatifier = {
-    enable = true;
-    autostart = true;
-  };
 
   programs.ghostty = {
     enable = true;
@@ -24,7 +14,6 @@
         "ctrl+shift+x=close_tab:this"
         "ctrl+shift+w=close_surface"
       ];
-      theme = "noctalia";
     };
   };
 
@@ -51,10 +40,5 @@
       name = "New Window";
       exec = "ghostty --gtk-single-instance=false";
     };
-  };
-
-  services.nextcloud-client = {
-    enable = true;
-    startInBackground = true;
   };
 }

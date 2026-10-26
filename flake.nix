@@ -38,11 +38,13 @@
           system = "x86_64-linux";
           user = "nico";
           workstation = true;
+          desktop = true;
         };
         hpe = mkSystem "hpe" {
           system = "x86_64-linux";
           user = "nico";
           workstation = true;
+          desktop = true;
         };
       };
     };
