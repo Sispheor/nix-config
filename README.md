@@ -1,8 +1,8 @@
 # NixOS configuration
 
-Personal `x86_64-linux` NixOS configurations for hosts `appart` and `hpe`, with
+Personal `x86_64-linux` NixOS configurations for hosts `appart`, `hpe`, and `wls2`, with
 Home Manager integrated into the system rebuild and user `nico`. Select the host
-to deploy using the corresponding flake output (`#appart` or `#hpe`). Shared
+to deploy using the corresponding flake output (`#appart`, `#hpe`, or `#wls2`). Shared
 system basics live in `modules/common.nix`. Two independent flags in `flake.nix`
 select additional system and Home Manager modules; both default to `false`:
 
@@ -13,24 +13,108 @@ select additional system and Home Manager modules; both default to `false`:
   KDE/SDDM, Niri, Noctalia, printing, PipeWire, Nixdatifier, and the Nextcloud
   background service. It also selects the Noctalia theme when Ghostty is enabled.
 
-Both current hosts enable both flags. A future WSL2 host can keep the workstation
-applications without a local desktop session by setting:
+The VM hosts `appart` and `hpe` enable both flags. The WSL2 host `wls2` keeps the
+workstation applications without a local desktop session by setting:
 
 ```nix
 workstation = true;
 desktop = false;
 ```
 
-The host's WSL2 integration belongs in its own `hosts/<host>` configuration.
+`hosts/wls2/default.nix` enables NixOS-WSL with `nico` as the default user and
+keeps networking and DNS under WSL's control, overriding the shared
+NetworkManager and local dnsmasq settings. GUI applications use WSLg.
 
-## Bootstrap after a minimal installation
+## Install on WSL2 (`wls2`)
+
+This procedure targets an x86-64 Windows machine with a current WSL2/WSLg
+installation. The flake host name is **`wls2`**; the Windows distribution name
+below is **`NixOS`**.
+
+1. In PowerShell, update WSL and download `nixos.wsl` from the
+   [latest official NixOS-WSL release](https://github.com/nix-community/NixOS-WSL/releases/latest).
+   Install and open it (the `--from-file` option requires WSL 2.4.4 or later):
+
+   ```powershell
+   wsl --update
+   wsl --install --from-file "$HOME\Downloads\nixos.wsl" --name NixOS
+   wsl -d NixOS
+   ```
+
+2. In the new NixOS shell, set the initial `nixos` user's password and prepare a
+   checkout in the Linux filesystem:
+
+   ```bash
+   passwd
+   sudo nix-channel --update
+   nix-shell -p git --run 'git clone https://github.com/Sispheor/nix-config.git ~/nixos-config'
+   cd ~/nixos-config
+   ```
+
+   Use a revision containing the `wls2` configuration. If testing local changes,
+   transfer them into this checkout and track new files with Git before rebuilding.
+
+3. Build the complete system and Home Manager configuration for the next start:
+
+   ```bash
+   sudo nixos-rebuild boot \
+     --option experimental-features 'nix-command flakes' \
+     --flake "$PWD#wls2"
+   exit
+   ```
+
+   Use `boot` for this first rebuild because it changes the default user from
+   `nixos` to `nico`. There is no hardware configuration or GRUB installation for
+   this host; follow this WSL procedure rather than `scripts/bootstrap.sh`.
+
+4. In PowerShell, apply the new generation using the
+   [NixOS-WSL username-change restart sequence](https://nix-community.github.io/NixOS-WSL/how-to/change-username.html),
+   then set `nico`'s password and open the default user's shell:
+
+   ```powershell
+   wsl --terminate NixOS
+   wsl -d NixOS --user root -- exit
+   wsl --terminate NixOS
+   wsl -d NixOS --user root -- passwd nico
+   wsl -d NixOS
+   ```
+
+5. In the new shell, verify the user and move the checkout into its permanent
+   location. For a fresh official image, the initial user's home is `/home/nixos`:
+
+   ```bash
+   whoami # should print nico
+   hostname # should print wls2
+   sudo mv /home/nixos/nixos-config "$HOME/nixos-config"
+   sudo chown -R nico:users "$HOME/nixos-config"
+   cd ~/nixos-config
+   systemctl status home-manager-nico.service --no-pager
+   command -v mise pycharm code firefox
+   firefox
+   ```
+
+   Firefox should open through WSLg on the Windows desktop. PyCharm (`pycharm`)
+   and VS Code (`code`) can be launched in the same way. Home Manager should show
+   a successful activation. Niri, Noctalia, KDE, and SDDM are disabled on this host.
+
+For subsequent rebuilds, run inside WSL:
+
+```bash
+cd ~/nixos-config
+sudo nixos-rebuild switch --flake .#wls2
+```
+
+When a restart is needed after changing WSL settings, exit the shell and run
+`wsl --terminate NixOS` followed by `wsl -d NixOS` from PowerShell.
+
+## Bootstrap a VM after a minimal installation (`appart` / `hpe`)
 
 1. Install minimal NixOS to the VM's disk and boot into the installed system.
    Create user `nico` with a password and membership in `wheel` so it can use
    `sudo`. Connect to the network and make sure the system clock is correct.
    Keep the generated `/etc/nixos/hardware-configuration.nix`.
 
-   Both current host configurations expect **BIOS boot with GRUB on `/dev/sda`**.
+   Both VM host configurations expect **BIOS boot with GRUB on `/dev/sda`**.
    Choose that layout when creating/installing the VM. For UEFI or a different
    boot disk, adapt the bootloader settings in `hosts/<host>/default.nix` and
    the bootstrap checks before proceeding.
@@ -100,7 +184,7 @@ Keep this checkout for future configuration changes. The minimal installation's
 By default, bootstrap keeps the versions in `flake.lock`. This configuration
 tracks `nixos-unstable`; the lock file selects its exact revision. There is no
 separate channel upgrade required before applying the flake. The lock file is
-shared by both hosts: each rebuild uses the input revisions in its checkout.
+shared by all hosts: each rebuild uses the input revisions in its checkout.
 
 To explicitly update **all** inputs during preparation:
 
@@ -119,7 +203,7 @@ nix flake update
 sudo nixos-rebuild switch --flake ".#$HOST"
 ```
 
-`system.stateVersion` and `home.stateVersion` are currently `26.05` on both
+`system.stateVersion` and `home.stateVersion` are currently `26.05` on all
 hosts. These control compatibility defaults, not the package release. Review
 them for your fresh installation; do not increase them as part of routine
 package updates.
