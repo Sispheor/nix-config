@@ -48,6 +48,7 @@
     gcc
     git
     gnumake
+    inetutils
     ipcalc
     jq
     ncdu
