@@ -228,4 +228,5 @@ project-local Nix shell when needed; mise does not supply those dependencies.
 
 Project-specific native environments can also live in Home Manager. The
 [development modules](users/modules/development/README.md) provide
-`tower-automation-shell`, keeping Nix-specific support out of the shared project.
+`tower-automation-shell` and `squest-shell`, keeping Nix-specific support out
+of the shared projects.

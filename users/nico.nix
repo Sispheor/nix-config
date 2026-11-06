@@ -4,6 +4,7 @@
 
 {
   imports = [
+    ./modules/development/squest.nix
     ./modules/development/tower-automation.nix
     ./modules/mise.nix
   #  ./modules/git.nix

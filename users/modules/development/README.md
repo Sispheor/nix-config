@@ -93,3 +93,35 @@ is embedded in the module; the command uses the directory it is launched from.
 The coworker's configuration supplies its own pinned nixpkgs version.
 
 The shared tower-automation repository needs no Nix-specific configuration.
+
+## Squest
+
+`squest.nix` is imported for `nico` on `appart`, `hpe`, and `wls2`. It installs
+`squest-shell`, providing Python 3.12, Poetry, Node.js/npm, Graphviz, and the
+native libraries needed to build Squest's MySQL, PostgreSQL, and LDAP Python
+dependencies. Docker and PyCharm are configured separately by the host.
+
+After rebuilding your host, open a new terminal and set up the checkout:
+
+```bash
+cd /path/to/squest
+squest-shell
+poetry env use python3.12
+poetry install
+npm install
+poetry env info --path
+```
+
+The shell sets `POETRY_VIRTUALENVS_IN_PROJECT=true`, so Poetry places the
+interpreter at `.venv/bin/python`. Select that interpreter in PyCharm, and
+launch `pycharm .` from `squest-shell` so PyCharm inherits the native library
+environment when running the application. To run it from a terminal instead:
+
+```bash
+poetry run python manage.py runserver
+```
+
+Follow [Squest's development guide](https://hewlettpackard.github.io/squest/2.8.5/dev/dev-env/)
+to start the database, RabbitMQ, and Redis with Docker Compose and initialize
+the database. The Nix shell replaces the guide's pyenv, nvm, and system package
+installation steps; it does not install Python or npm packages itself.
