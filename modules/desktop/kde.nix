@@ -12,7 +12,8 @@
     ];
   };
 
-  services.xserver.xkb.layout = "fr";
+  services.xserver.xkb.layout = "us";
+  services.xserver.xkb.variant = "altgr-intl";
 
   environment.systemPackages = [
     (pkgs.sddm-astronaut.override { embeddedTheme = "astronaut"; })

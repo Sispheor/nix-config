@@ -1,7 +1,8 @@
 input {
     keyboard {
         xkb {
-            layout "fr"
+            layout "us"
+            variant "altgr-intl"
         }
     }
     mouse {

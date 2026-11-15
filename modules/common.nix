@@ -27,7 +27,7 @@
   };
 
   # Configure console keymap
-  console.keyMap = "fr";
+  console.keyMap = "us-acentos";
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${user} = {
