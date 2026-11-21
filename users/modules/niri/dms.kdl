@@ -1,0 +1,37 @@
+include optional=true "dms/alttab.kdl"
+include optional=true "dms/binds-next.kdl"
+include optional=true "dms/binds.kdl"
+include optional=true "dms/colors.kdl"
+include optional=true "dms/cursor.kdl"
+include optional=true "dms/layout.kdl"
+include optional=true "dms/outputs.kdl"
+include optional=true "dms/windowrules.kdl"
+include optional=true "dms/wpblur.kdl"
+
+layer-rule {
+    match namespace="^quickshell$"
+    place-within-backdrop true
+}
+
+window-rule {
+    match app-id="dev.duxlabs.shell"
+    open-floating true
+}
+
+binds {
+    Mod+Space hotkey-overlay-title="Application Launcher" {
+        spawn "dms" "ipc" "call" "spotlight" "toggle";
+    }
+    Mod+V hotkey-overlay-title="Clipboard Manager" {
+        spawn "dms" "ipc" "call" "clipboard" "toggle";
+    }
+    Mod+Comma hotkey-overlay-title="DMS Settings" {
+        spawn "dms" "ipc" "call" "settings" "focusOrToggle";
+    }
+    Mod+Ctrl+N hotkey-overlay-title="Notification Center" {
+        spawn "dms" "ipc" "call" "notifications" "toggle";
+    }
+    Super+Alt+L hotkey-overlay-title="Lock the Screen" {
+        spawn "dms" "ipc" "call" "lock" "lock";
+    }
+}

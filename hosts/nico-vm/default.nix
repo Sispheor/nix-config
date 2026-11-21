@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/desktop/gnome.nix
+    ../../modules/desktop/dms.nix
     ../../modules/virtualization/docker.nix
     ../../modules/virtualization/vmware.nix
   ];

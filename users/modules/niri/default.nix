@@ -1,8 +1,6 @@
-{ config, lib, pkgs, ... }:
+{ hostName, lib, pkgs, ... }:
 
 {
-  programs.ghostty.settings.theme = lib.mkIf config.programs.ghostty.enable "noctalia";
-
   xdg.configFile."niri/config.kdl".source =
     pkgs.runCommand "niri-config-checked"
       {
@@ -12,4 +10,10 @@
         niri validate --config ${./config.kdl}
         cp ${./config.kdl} $out
       '';
+
+  xdg.configFile."niri/system.kdl".text = lib.optionalString (hostName == "nico-vm") ''
+    debug {
+        disable-cursor-plane
+    }
+  '';
 }

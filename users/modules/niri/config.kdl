@@ -23,24 +23,12 @@ window-rule {
   clip-to-geometry true
 }
 
-// Floating Noctalia settings window.
-window-rule {
-  match app-id="dev.noctalia.Noctalia"
-  open-floating true
-  default-column-width { fixed 1080; }
-  default-window-height { fixed 920; }
-}
-
 debug {
-  // Allows notification actions and window activation from Noctalia.
+  // Allows notification actions and shell window activation.
   honor-xdg-activation-with-invalid-serial
 }
 
 prefer-no-csd
-
-
-// Start Noctalia automatically
-spawn-at-startup "noctalia"
 
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
@@ -289,10 +277,7 @@ binds {
     Mod+Shift+Equal { set-window-height "+10%"; }
 
     // Move the focused window between the floating and the tiling layout.
-    // Mod+V       { toggle-window-floating; }
-    Mod+V {
-        spawn "noctalia" "msg" "panel-toggle" "clipboard";
-    }
+    Mod+V { toggle-window-floating; }
 
     Mod+Shift+V { switch-focus-between-floating-and-tiling; }
 
@@ -306,13 +291,8 @@ binds {
     // a matching layout switch hotkey configured in xkb options above.
     // Having both at once on the same hotkey will break the switching,
     // since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
-    // Mod+Space       { switch-layout "next"; }
+    Mod+Space { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
-    Mod+Space {
-        spawn "noctalia" "msg" "panel-toggle" "launcher"
-    }
-
-
 
     Print { screenshot; }
     Ctrl+Print { screenshot-screen; }
@@ -336,3 +316,6 @@ binds {
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
 }
+
+include optional=true "system.kdl"
+include optional=true "shell.kdl"

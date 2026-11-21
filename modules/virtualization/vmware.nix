@@ -31,6 +31,11 @@
 
   # vmtoolsd invokes ps while initializing the desktop plugin.
   systemd.user.services.clipway.path = [ pkgs.procps ];
+  # Do not let GDM's Wayland greeter claim the VMware clipboard connection.
+  systemd.user.services.clipway.unitConfig.ConditionEnvironment = lib.mkForce [
+    "WAYLAND_DISPLAY"
+    "XDG_SESSION_CLASS=user"
+  ];
 
   hardware.graphics = {
     enable = true; # enables the system graphics driver infrastructure
