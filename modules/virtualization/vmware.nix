@@ -1,4 +1,4 @@
-{ config, inputs, lib, ... }:
+{ config, inputs, lib, pkgs, ... }:
 
 {
   imports = [
@@ -28,6 +28,9 @@
     # target = "plasma-workspace-wayland.target";
     target = "graphical-session.target";
   };
+
+  # vmtoolsd invokes ps while initializing the desktop plugin.
+  systemd.user.services.clipway.path = [ pkgs.procps ];
 
   hardware.graphics = {
     enable = true; # enables the system graphics driver infrastructure
