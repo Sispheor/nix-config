@@ -1,12 +1,6 @@
 { ... }:
 
 {
-  imports = [
-    ./desktop/kde.nix
-    ./desktop/niri.nix
-    ./desktop/noctalia.nix
-  ];
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
 

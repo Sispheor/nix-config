@@ -4,6 +4,8 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../modules/desktop/kde.nix
+      ../../modules/desktop/noctalia.nix
       ../../modules/virtualization/docker.nix
       ../../modules/virtualization/vmware.nix
     ];

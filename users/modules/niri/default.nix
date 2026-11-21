@@ -1,6 +1,8 @@
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
+  programs.ghostty.settings.theme = lib.mkIf config.programs.ghostty.enable "noctalia";
+
   xdg.configFile."niri/config.kdl".source =
     pkgs.runCommand "niri-config-checked"
       {

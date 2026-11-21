@@ -1,8 +1,7 @@
-{ config, inputs, lib, ... }:
+{ inputs, ... }:
 
 {
   imports = [
-    ./modules/niri
     inputs.nixdatifier.homeManagerModules.default
   ];
 
@@ -10,8 +9,6 @@
     enable = true;
     autostart = true;
   };
-
-  programs.ghostty.settings.theme = lib.mkIf config.programs.ghostty.enable "noctalia";
 
   services.nextcloud-client = {
     enable = true;

@@ -51,6 +51,12 @@
           workstation = true;
           desktop = true;
         };
+        nico-vm = mkSystem "nico-vm" {
+          system = "x86_64-linux";
+          user = "nico";
+          workstation = true;
+          desktop = true;
+        };
         wls2 = mkSystem "wls2" {
           system = "x86_64-linux";
           user = "nico";
