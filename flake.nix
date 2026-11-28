@@ -2,15 +2,10 @@
   description = "Nicolas' NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.11";
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nixos-wsl = {
-      url = "github:nix-community/NixOS-WSL/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -18,11 +13,6 @@
 
     nixdatifier = {
       url = "github:Muddyblack/nixdatifier";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    noctalia = {
-      url = "github:noctalia-dev/noctalia";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -44,29 +34,11 @@
     in
     {
       nixosConfigurations = {
-        appart = mkSystem "appart" {
-          system = "x86_64-linux";
-          user = "nico";
-          workstation = true;
-          desktop = true;
-        };
-        hpe = mkSystem "hpe" {
-          system = "x86_64-linux";
-          user = "nico";
-          workstation = true;
-          desktop = true;
-        };
         nico-vm = mkSystem "nico-vm" {
           system = "x86_64-linux";
           user = "nico";
           workstation = true;
           desktop = true;
-        };
-        wls2 = mkSystem "wls2" {
-          system = "x86_64-linux";
-          user = "nico";
-          workstation = true;
-          desktop = false;
         };
       };
     };

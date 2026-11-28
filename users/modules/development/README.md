@@ -37,14 +37,14 @@ programs.nix-ld.enable = true;
 ```
 
 This is a NixOS option, not a Home Manager option. It is already enabled for
-both `appart` and `hpe` in this repository.
+`nico-vm` in this repository.
 
 ### Apply and use
 
 Rebuild the NixOS configuration, then open a new terminal:
 
 ```bash
-HOST=appart # or hpe, on the corresponding VM
+HOST=nico-vm
 sudo nixos-rebuild switch --flake "path:/home/nico/nixos-config#$HOST"
 ```
 
@@ -96,7 +96,7 @@ The shared tower-automation repository needs no Nix-specific configuration.
 
 ## Squest
 
-`squest.nix` is imported for `nico` on `appart`, `hpe`, and `wls2`. It installs
+`squest.nix` is imported for `nico` on `nico-vm`. It installs
 `squest-shell`, providing Python 3.12, Poetry, Node.js/npm, Graphviz, and the
 native libraries needed to build Squest's MySQL, PostgreSQL, and LDAP Python
 dependencies. Docker and PyCharm are configured separately by the host.

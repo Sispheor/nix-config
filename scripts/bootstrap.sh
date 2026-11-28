@@ -10,7 +10,7 @@ Prepare this checkout for the selected host on a freshly installed NixOS VM.
 Copy the installed hardware configuration (backing up the old copy), check
 prerequisites, and print the rebuild command. No rebuild or reboot is performed.
 
-  --host    Select the host to deploy (appart, hpe, or nico-vm).
+  --host    Select the nico-vm host to deploy.
   --update  Update all flake inputs; otherwise keep flake.lock unchanged.
   --help    Show this help.
 EOF
@@ -26,7 +26,7 @@ host=
 while (( $# )); do
   case "$1" in
     --host)
-      (( $# >= 2 )) || die '--host requires a value (appart, hpe, or nico-vm).'
+      (( $# >= 2 )) || die '--host requires the value nico-vm.'
       [[ -z "$host" ]] || die '--host may only be specified once.'
       host=$2
       shift 2
@@ -37,8 +37,8 @@ while (( $# )); do
   esac
 done
 case "$host" in
-  appart|hpe|nico-vm) ;;
-  *) usage >&2; die 'Select a host with --host appart, --host hpe, or --host nico-vm.' ;;
+  nico-vm) ;;
+  *) usage >&2; die 'Select the host with --host nico-vm.' ;;
 esac
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
